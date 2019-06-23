@@ -25,14 +25,10 @@ export class StatebaseProvider extends React.Component {
 	}
 }
 
-export const withStatebase = Component => {
-	return props => {
-		return (
-			<Statebase.Consumer>
-				{state => (
-					<Component {...props} state={state} />
-				)}
-			</Statebase.Consumer>
-		);
-	};
-};
+export const withStatebase = Component => props => (
+	<Statebase.Consumer>
+		{(state) => (
+			<Component {...props} statebase={state} />
+		)}
+	</Statebase.Consumer>
+);

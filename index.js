@@ -80,7 +80,7 @@ var withStatebase = function withStatebase(Component) {
   return function (props) {
     return _react["default"].createElement(Statebase.Consumer, null, function (state) {
       return _react["default"].createElement(Component, _extends({}, props, {
-        state: state
+        statebase: state
       }));
     });
   };
