@@ -1,0 +1,42 @@
+{
+  "name": "react-statebase",
+  "version": "0.9.0",
+  "description": "React components for creating a global state and connecting to it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "./node_modules/.bin/babel src --out-file index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ee92/react-statebase.git"
+  },
+  "keywords": [
+    "react",
+    "statebase",
+    "context",
+    "provider",
+    "connect"
+  ],
+  "author": "Egor Egorov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ee92/react-statebase/issues"
+  },
+  "homepage": "https://github.com/ee92/react-statebase#readme",
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "statebase": "^0.9.6"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "statebase": "^0.9.6"
+  },
+  "dependencies": {}
+}
