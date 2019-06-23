@@ -1,6 +1,6 @@
 {
   "name": "react-statebase",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "React components for creating a global state and connecting to it.",
   "main": "index.js",
   "scripts": {
