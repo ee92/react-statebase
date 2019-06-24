@@ -44,7 +44,7 @@ function (_React$Component) {
     _classCallCheck(this, StatebaseProvider);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(StatebaseProvider).call(this, props));
-    _this.state = (0, _statebase["default"])(props.initialState);
+    _this.statebase = (0, _statebase["default"])(props.initialState);
     return _this;
   }
 
@@ -53,8 +53,8 @@ function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.unsub = this.state.listen(function (ref) {
-        _this2.setState(ref.val());
+      this.unsub = this.statebase.listen(function () {
+        return _this2.forceUpdate();
       });
     }
   }, {
@@ -66,7 +66,7 @@ function (_React$Component) {
     key: "render",
     value: function render() {
       return _react["default"].createElement(Statebase.Provider, {
-        value: this.state
+        value: this.statebase
       }, this.props.children);
     }
   }]);
