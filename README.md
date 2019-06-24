@@ -1,10 +1,15 @@
 # React Statebase
-Statebase bindings for React. Inspired by react-redux.
+React binding for [Statebase](https://github.com/ee92/statebase "Statebase"). Inspired by react-redux.
 
 ### example usage
 
-Include and initialize with default state:
+Install:
 ```
+npm install react-statebase --save
+```
+
+Include and initialize with default state:
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {StatebaseProvider, withStatebase} from 'react-statebase'
@@ -23,7 +28,7 @@ ReactDOM.render(
 ```
 
 Connect a component to your statebase:
-```
+```js
 function App(props) {
     var user = props.statebase.ref('user').val()
     return (
@@ -35,3 +40,7 @@ function App(props) {
 }
 export withStatebase(App) 
 ```
+
+### License
+
+MIT
