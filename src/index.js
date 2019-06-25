@@ -6,17 +6,19 @@ const Statebase = React.createContext(null);
 export class StatebaseProvider extends React.Component {
 	constructor(props) {
 		super(props);
-		this.statebase = createState(props.initialState);
+		this.state = createState(props.initialState);
 	}
 	componentDidMount() {
-		this.unsub = this.statebase.listen(() => this.forceUpdate());
+		this.unsub = this.state.listen((ref) => {
+			this.setState(ref.val());
+		});
 	}
 	componentWillUnmount() {
 		this.unsub && this.unsub();
 	}
 	render() {
 		return (
-			<Statebase.Provider value={this.statebase}>
+			<Statebase.Provider value={this.state}>
 				{this.props.children}
 			</Statebase.Provider>
 		)
