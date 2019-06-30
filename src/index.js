@@ -1,20 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import createState from 'statebase';
 
 const Statebase = React.createContext(null);
 
-export class StatebaseProvider extends React.Component {
+export class StatebaseProvider extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = createState(props.initialState);
-	}
-	componentDidMount() {
-		this.unsub = this.state.listen((ref) => {
-			this.setState(ref.val());
-		});
-	}
-	componentWillUnmount() {
-		this.unsub && this.unsub();
 	}
 	render() {
 		return (
@@ -25,10 +17,28 @@ export class StatebaseProvider extends React.Component {
 	}
 }
 
-export const withStatebase = Component => props => (
-	<Statebase.Consumer>
-		{(state) => (
-			<Component {...props} statebase={state} />
-		)}
-	</Statebase.Consumer>
-);
+export const withStatebase = (Component) => {
+	return class extends React.PureComponent {
+		render () {
+			return (
+				<Statebase.Consumer>
+					{(state) => (
+						<Component {...this.props} statebase={state}/>
+					)}
+				</Statebase.Consumer>
+			)
+		}
+	}
+}
+
+export const useStatebase = (ref) => {
+   const [state, setState] = useState(ref.val())
+   useEffect(() => {
+		const unsub = ref.listen((snap) => {
+			setState(snap.val())
+		})
+		return () => unsub && unsub()
+	// eslint-disable-next-line
+	}, [])
+	return [state, ref.set]
+}

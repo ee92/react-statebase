@@ -3,15 +3,25 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.withStatebase = exports.StatebaseProvider = void 0;
+exports.useStatebase = exports.withStatebase = exports.StatebaseProvider = void 0;
 
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
 
 var _statebase = _interopRequireDefault(require("statebase"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
@@ -35,8 +45,8 @@ var Statebase = _react["default"].createContext(null);
 
 var StatebaseProvider =
 /*#__PURE__*/
-function (_React$Component) {
-  _inherits(StatebaseProvider, _React$Component);
+function (_React$PureComponent) {
+  _inherits(StatebaseProvider, _React$PureComponent);
 
   function StatebaseProvider(props) {
     var _this;
@@ -49,20 +59,6 @@ function (_React$Component) {
   }
 
   _createClass(StatebaseProvider, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.unsub = this.state.listen(function (ref) {
-        _this2.setState(ref.val());
-      });
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.unsub && this.unsub();
-    }
-  }, {
     key: "render",
     value: function render() {
       return _react["default"].createElement(Statebase.Provider, {
@@ -72,18 +68,57 @@ function (_React$Component) {
   }]);
 
   return StatebaseProvider;
-}(_react["default"].Component);
+}(_react["default"].PureComponent);
 
 exports.StatebaseProvider = StatebaseProvider;
 
 var withStatebase = function withStatebase(Component) {
-  return function (props) {
-    return _react["default"].createElement(Statebase.Consumer, null, function (state) {
-      return _react["default"].createElement(Component, _extends({}, props, {
-        statebase: state
-      }));
-    });
-  };
+  return (
+    /*#__PURE__*/
+    function (_React$PureComponent2) {
+      _inherits(_class, _React$PureComponent2);
+
+      function _class() {
+        _classCallCheck(this, _class);
+
+        return _possibleConstructorReturn(this, _getPrototypeOf(_class).apply(this, arguments));
+      }
+
+      _createClass(_class, [{
+        key: "render",
+        value: function render() {
+          var _this2 = this;
+
+          return _react["default"].createElement(Statebase.Consumer, null, function (state) {
+            return _react["default"].createElement(Component, _extends({}, _this2.props, {
+              statebase: state
+            }));
+          });
+        }
+      }]);
+
+      return _class;
+    }(_react["default"].PureComponent)
+  );
 };
 
 exports.withStatebase = withStatebase;
+
+var useStatebase = function useStatebase(ref) {
+  var _useState = (0, _react.useState)(ref.val()),
+      _useState2 = _slicedToArray(_useState, 2),
+      state = _useState2[0],
+      setState = _useState2[1];
+
+  (0, _react.useEffect)(function () {
+    var unsub = ref.listen(function (snap) {
+      setState(snap.val());
+    });
+    return function () {
+      return unsub && unsub();
+    }; // eslint-disable-next-line
+  }, []);
+  return [state, ref.set];
+};
+
+exports.useStatebase = useStatebase;
