@@ -12,7 +12,7 @@ Include and initialize with default state:
 ```js
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {StatebaseProvider, withStatebase} from 'react-statebase'
+import {StatebaseProvider} from 'react-statebase'
 import App from './App.js'
 
 var initialState = {
@@ -27,18 +27,39 @@ ReactDOM.render(
 )
 ```
 
-Connect a component to your statebase:
+Connect a component to your statebase and 'use' part of it:
 ```js
+import React from 'react'
+import {withStatebase, useStatebase} from 'react-statebase'
+
 function App(props) {
-    var user = props.statebase.ref('user').val()
+
+    const userRef = props.statebase.ref('user')
+    const todosRef = props.statebase.ref('todos')
+    const [user, setUser] = useStatebase(userRef)
+    const [todos] = useStatebase(todosRef)
+    function signIn() {
+        someFakeAuthentication()
+        .then(authResult => setUser(authResult.user))
+    }
+    function signOut() {
+        setUser(null)
+    }
     return (
         <div>
-            Greetings {user ? user.name : 'stranger'}
-            <Todos/>
+            <h1>Greetings {user ? user.name : 'stranger'}</h1>
+            <button onClick={() => user ? signOut() : signIn()}>
+                {user ? 'sign out' : 'sign in'}
+            </button>
+            <h2>Todo:</h2>
+            {!todos && <div>no todos yet...</div>}
+            {todos.map(todo => 
+                <div>{todo.task}</div>
+            )}
         </div>
     )
 }
-export withStatebase(App) 
+export default withStatebase(App) 
 ```
 
 ### License
